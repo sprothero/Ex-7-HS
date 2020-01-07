@@ -1,12 +1,11 @@
 import os
-import pygame
-
-os.environ['KIVY_GL_BACKEND'] = 'sdl2'
-
 from kivy.core.window import Window
-
-os.environ['DISPLAY'] = ":0.0"
-os.environ['KIVY_WINDOW'] = 'egl_rpi'
+import pygame
+import spidev
+from time import sleep
+import RPi.GPIO as GPIO
+from pidev.stepper import stepper
+from Slush.Devices import L6470Registers
 
 # ------------------------- all imports -------------------------
 from kivy.app import App
@@ -25,14 +24,23 @@ from kivy.animation import AnimationTransition
 from kivy.graphics import Color, Rectangle
 from kivy.uix.slider import Slider
 from threading import Thread
-from time import sleep
 # -----------------------------------------------------------------
 
 MIXPANEL_TOKEN = "x"
 MIXPANEL = MixPanel("Project Name", MIXPANEL_TOKEN)
 
+spi = spidev.SpiDev()
+
+s0 = stepper(port=0, micro_steps=32, hold_current=20, run_current=20, accel_current=20, deaccel_current=20,
+             steps_per_unit=200, speed=8)
+# Init a 200 steps per revolution stepper on Port 0
+
 SCREEN_MANAGER = ScreenManager()
 MAIN_SCREEN_NAME = 'main'
+
+Builder.load_file('main.kv')
+Window.clearcolor = (0.7, 0.7, 0.7, 1)
+# Initial Window Color
 
 
 class ProjectNameGUI(App):
@@ -41,7 +49,49 @@ class ProjectNameGUI(App):
         return SCREEN_MANAGER
 # Launches Window Manager
 
+# -----------------------------------------------------------------
 
-Window.clearcolor = (0.7, 0.7, 0.7, 1)
-# Initial Window Color
 
+class MainScreen(Screen):
+    button_state = ObjectProperty(None)
+
+    def start_control_switch(self):
+        if self.start_text() == 'Off':
+            self.startButton.text = "Stop"
+
+
+        elif self.start_text() == 'On':
+            self.startButton.text = "Start"
+
+    def start_text(self):
+        if self.startButton.text == "Start":
+            return 'Off'
+
+        elif self.startButton.text == "Stop":
+            return 'On'
+
+
+# ----------------- Screen Declarations -----------------------
+Builder.load_file('main.kv')
+SCREEN_MANAGER.add_widget(MainScreen(name=MAIN_SCREEN_NAME))
+# -------------------------------------------------------------
+
+
+def send_event(event_name):
+    """
+    Send an event to MixPanel without properties
+    :param event_name: Name of the event
+    :return: None
+    """
+    global MIXPANEL
+
+    MIXPANEL.set_event_name(event_name)
+    MIXPANEL.send_event()
+# MixPanel Events
+
+
+if __name__ == "__main__":
+    # send_event("Project Initialized")
+    # Window.fullscreen = 'auto'
+    ProjectNameGUI().run()
+# Execute GUI

@@ -1,6 +1,15 @@
 <MainScreen>:
     name: 'main'
-
+    startButton: startButton
 
     FloatLayout:
         size_hint: None, None
+
+    DPEAButton:
+        id: startButton
+        text: "Start"
+        size: 500, 300
+        x: root.width * 0.5
+        y: root.height * 0.5
+        color: 0, 0.7, 0.81, 1
+        on_press: root.start_control_switch()

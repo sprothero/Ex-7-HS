@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="pi@widger08-pi.local">
+  <component name="PublishConfigData" autoUpload="Always" serverName="pi@widget08-pi.local">
     <serverData>
       <paths name="Wired Raspberry Pi">
         <serverdata>
@@ -9,7 +9,7 @@
           </mappings>
         </serverdata>
       </paths>
-      <paths name="pi@widger08-pi.local">
+      <paths name="pi@widget08-pi.local">
         <serverdata>
           <mappings>
             <mapping deploy="/home/pi/Documents" local="$PROJECT_DIR$" />
