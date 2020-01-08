@@ -2,9 +2,24 @@
     name: 'main'
     startButton: startButton
     dirSwitch: dirSwitch
+    speedSlider: speedSlider
+
+    on_enter: root.start_thread()
 
     FloatLayout:
         size_hint: None, None
+
+    Slider:
+        id: speedSlider
+        min: 50
+        max: 1000
+        step: 10
+        size_hint: None, None
+        size: 1500, 10000
+        orientation: 'horizontal'
+        center: root.width * 0.5, root.height * 0.2
+        background_width: 250
+        cursor_size: (1500, 1500)
 
     DPEAButton:
         id: startButton
@@ -23,3 +38,4 @@
         y: root.height * 0.5
         color: 0.0, 0.7, 0.81, 1
         on_press: root.direction_switch()
+

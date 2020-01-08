@@ -15,6 +15,7 @@ from kivy.properties import ObjectProperty
 from kivy.animation import Animation
 from kivy.clock import Clock, mainthread
 from pidev.MixPanel import MixPanel
+from pidev.Joystick import Joystick
 from pidev.kivy.PassCodeScreen import PassCodeScreen
 from datetime import datetime
 from pidev.kivy import DPEAButton
@@ -24,6 +25,7 @@ from kivy.animation import AnimationTransition
 from kivy.graphics import Color, Rectangle
 from kivy.uix.slider import Slider
 from threading import Thread
+from time import sleep
 # -----------------------------------------------------------------
 
 MIXPANEL_TOKEN = "x"
@@ -55,8 +57,13 @@ class ProjectNameGUI(App):
 class MainScreen(Screen):
     button_state = ObjectProperty(None)
 
-    global m_speed
-    m_speed = 500
+    def start_thread(self):
+        Thread(target=self.m_speed).start()
+
+    def m_speed(self):
+        while 1:
+            return str(self.speedSlider.value)
+            sleep(0.01)
 
     def start_control_switch(self):
         if self.start_text() == 'Off':
@@ -65,15 +72,16 @@ class MainScreen(Screen):
 
             if self.dir_text() == 'Left':
                 s0.free()
-                s0.run(1, m_speed)
+                s0.run(1, self.m_speed())
             if self.dir_text() == 'Right':
-                s0.run(0, m_speed)
+                s0.free()
+                s0.run(0, self.m_speed())
 
         elif self.start_text() == 'On':
             s0.free()
             self.startButton.text = "Start"
             self.startButton.color = .43, 0.68, 0.08, 1
-            s0.stop()
+            s0.free()
 
     def start_text(self):
         if self.startButton.text == "Start":
@@ -88,14 +96,14 @@ class MainScreen(Screen):
 
             if self.start_text() == 'On':
                 s0.free()
-                s0.run(1, m_speed)
+                s0.run(1, self.m_speed())
 
         elif self.dir_text() == 'Right':
             self.dirSwitch.text = "<-"
 
             if self.start_text() == 'On':
                 s0.free()
-                s0.run(0, m_speed)
+                s0.run(0, self.m_speed())
 
     def dir_text(self):
         if self.dirSwitch.text == "->":
