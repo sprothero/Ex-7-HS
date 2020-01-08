@@ -55,13 +55,25 @@ class ProjectNameGUI(App):
 class MainScreen(Screen):
     button_state = ObjectProperty(None)
 
+    global m_speed
+    m_speed = 500
+
     def start_control_switch(self):
         if self.start_text() == 'Off':
             self.startButton.text = "Stop"
+            self.startButton.color = 1, 0.21, 0.13, 1
 
+            if self.dir_text() == 'Left':
+                s0.free()
+                s0.run(1, m_speed)
+            if self.dir_text() == 'Right':
+                s0.run(0, m_speed)
 
         elif self.start_text() == 'On':
+            s0.free()
             self.startButton.text = "Start"
+            self.startButton.color = .43, 0.68, 0.08, 1
+            s0.stop()
 
     def start_text(self):
         if self.startButton.text == "Start":
@@ -69,6 +81,28 @@ class MainScreen(Screen):
 
         elif self.startButton.text == "Stop":
             return 'On'
+
+    def direction_switch(self):
+        if self.dir_text() == 'Left':
+            self.dirSwitch.text = "->"
+
+            if self.start_text() == 'On':
+                s0.free()
+                s0.run(1, m_speed)
+
+        elif self.dir_text() == 'Right':
+            self.dirSwitch.text = "<-"
+
+            if self.start_text() == 'On':
+                s0.free()
+                s0.run(0, m_speed)
+
+    def dir_text(self):
+        if self.dirSwitch.text == "->":
+            return 'Right'
+
+        elif self.dirSwitch.text == "<-":
+            return 'Left'
 
 
 # ----------------- Screen Declarations -----------------------

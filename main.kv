@@ -1,6 +1,7 @@
 <MainScreen>:
     name: 'main'
     startButton: startButton
+    dirSwitch: dirSwitch
 
     FloatLayout:
         size_hint: None, None
@@ -9,7 +10,16 @@
         id: startButton
         text: "Start"
         size: 500, 300
-        x: root.width * 0.5
+        x: root.width * 0.55
         y: root.height * 0.5
-        color: 0, 0.7, 0.81, 1
+        color: 0.43, 0.68, 0.08, 1
         on_press: root.start_control_switch()
+
+    DPEAButton:
+        id: dirSwitch
+        text: "<-"
+        size: 500, 300
+        x: root.width * 0.2
+        y: root.height * 0.5
+        color: 0.0, 0.7, 0.81, 1
+        on_press: root.direction_switch()
