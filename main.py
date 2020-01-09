@@ -2,7 +2,6 @@ import os
 from kivy.core.window import Window
 import pygame
 import spidev
-from time import sleep
 import RPi.GPIO as GPIO
 from pidev.stepper import stepper
 from Slush.Devices import L6470Registers
@@ -50,7 +49,6 @@ class ProjectNameGUI(App):
     def build(self):
         return SCREEN_MANAGER
 # Launches Window Manager
-
 # -----------------------------------------------------------------
 
 
@@ -59,11 +57,33 @@ class MainScreen(Screen):
 
     def start_thread(self):
         Thread(target=self.m_speed).start()
+        Thread(target=self.start_control_switch()).start()
+        Thread(target=self.direction_switch()).start()
 
     def m_speed(self):
-        while 1:
-            return str(self.speedSlider.value)
-            sleep(0.01)
+        s0.free()
+        self.motor_move(0, )
+
+    def get_speed(self):
+        sleep(0.01)
+        return str(self.speedSlider.value)
+
+    def get_direction(self):
+        sleep(0.01)
+        if self.dir_text() == 'Left':
+            self.motor_move(1, self.get_speed())
+            self.dirSwitch.text = "->"
+            return '1'
+        elif self.dir_text() == 'Right':
+            self.motor_move(0, self.get_speed())
+            self.dirSwitch.text = "<-"
+            return '0'
+
+    @staticmethod
+    def motor_move(dire, speedy):
+        s0.free()
+        s0.run(dire, speedy)
+        sleep(0.01)
 
     def start_control_switch(self):
         if self.start_text() == 'Off':
@@ -71,17 +91,16 @@ class MainScreen(Screen):
             self.startButton.color = 1, 0.21, 0.13, 1
 
             if self.dir_text() == 'Left':
-                s0.free()
-                s0.run(1, self.m_speed())
+                self.motor_move(1, self.get_speed())
             if self.dir_text() == 'Right':
-                s0.free()
-                s0.run(0, self.m_speed())
+                self.motor_move(0, self.get_speed())
 
         elif self.start_text() == 'On':
             s0.free()
             self.startButton.text = "Start"
             self.startButton.color = .43, 0.68, 0.08, 1
             s0.free()
+            sleep(0.01)
 
     def start_text(self):
         if self.startButton.text == "Start":
@@ -89,21 +108,6 @@ class MainScreen(Screen):
 
         elif self.startButton.text == "Stop":
             return 'On'
-
-    def direction_switch(self):
-        if self.dir_text() == 'Left':
-            self.dirSwitch.text = "->"
-
-            if self.start_text() == 'On':
-                s0.free()
-                s0.run(1, self.m_speed())
-
-        elif self.dir_text() == 'Right':
-            self.dirSwitch.text = "<-"
-
-            if self.start_text() == 'On':
-                s0.free()
-                s0.run(0, self.m_speed())
 
     def dir_text(self):
         if self.dirSwitch.text == "->":
