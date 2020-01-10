@@ -46,3 +46,15 @@
         y: root.height * 0.5
         color: 0.0, 0.7, 0.81, 1
         on_press: root.direction_control()
+
+    Label: # label that displays get_position_in_units ---- NOT COMPLETE
+        id: positionLabel
+        font_size: 50
+        color: 1, 1, 1, 1
+        bold: True
+        color: 1, 1, 1, 1
+        x: root.width * 0
+        y: root.height * -0.4
+        outline_width: 5
+        outline_color: 0, 0, 0
+        text: str(get_position_in_units)
