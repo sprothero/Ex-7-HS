@@ -54,23 +54,23 @@ class ProjectNameGUI(App):
 
 class MainScreen(Screen):
     button_state = ObjectProperty(None)
+    global direct
+    direct = 1
 
     def m_speed(self):
         print("slider")
-        self.motor_move(self.get_direction(), self.get_speed())
+        self.start_motor()
 
     def start_motor(self):
-        global direct
         global speedy
-        direct = 1
         speedy = self.speedSlider.value
 
-        if self.start_text() == "Start":
+        if self.start_text() == 'Off':
             self.startButton.text = "Stop"
             self.startButton.color = 1, 0.21, 0.13, 1
             s0.run(direct, speedy)
 
-        elif self.start_text() == "Stop":
+        elif self.start_text() == 'On':
             self.startButton.text = "Start"
             self.startButton.color = 0.43, 0.68, 0.08, 1
             s0.softStop()
@@ -78,23 +78,23 @@ class MainScreen(Screen):
     def start_text(self):
         if self.startButton.text == "Start":
             return 'Off'
-
         elif self.startButton.text == "Stop":
             return 'On'
 
-    def get_direction(self):
-        if self.dirSwitch.text == "->":
-            self.dirSwitch.text = "<-"
-        elif self.dirSwitch.text == "<-":
-            self.dirSwitch.text = "->"
+    @staticmethod
+    def change_direction():
+        if direct == 0:
+            return 1
+        elif direct == 1:
+            return 0
 
     def direction_control(self):
-        if self.get_direction() == 0:
-            self.motor_move(1, self.get_speed())
-            self.dirSwitch.text = "->"
-        elif self.get_direction() == 1:
-            self.motor_move(0, self.get_speed())
-            self.dirSwitch.text = "<-"
+        if self.change_direction() == 1:
+            global direct
+            direct = 1
+        elif self.change_direction() == 0:
+            global direct
+            direct = 0
 
 
 # ----------------- Screen Declarations -----------------------
