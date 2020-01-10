@@ -4,8 +4,6 @@
     dirSwitch: dirSwitch
     speedSlider: speedSlider
 
-    on_enter: root.start_thread()
-
     FloatLayout:
         size_hint: None, None
 
@@ -20,7 +18,7 @@
         background_width: 150
         cursor_size: (3500, 3500)
         center: root.width * 0.1, root.height * 0.5
-        on_release: root.m_speed()
+        on_touch_move: root.m_speed()
 
     DPEAButton:
         id: startButton
@@ -38,5 +36,5 @@
         x: root.width * 0.2
         y: root.height * 0.5
         color: 0.0, 0.7, 0.81, 1
-        on_press: root.get_direction()
+        on_press: root.direction_control()
 
