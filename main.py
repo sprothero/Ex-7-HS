@@ -57,18 +57,36 @@ class MainScreen(Screen):
 
     def m_speed(self):
         print("slider")
-        s0.free()
-        sleep(0.001)
         self.motor_move(self.get_direction(), self.get_speed())
 
-    def get_speed(self):
-        return str(self.speedSlider.value)
+    def start_motor(self):
+        global direct
+        global speedy
+        direct = 1
+        speedy = self.speedSlider.value
+
+        if self.start_text() == "Start":
+            self.startButton.text = "Stop"
+            self.startButton.color = 1, 0.21, 0.13, 1
+            s0.run(direct, speedy)
+
+        elif self.start_text() == "Stop":
+            self.startButton.text = "Start"
+            self.startButton.color = 0.43, 0.68, 0.08, 1
+            s0.softStop()
+
+    def start_text(self):
+        if self.startButton.text == "Start":
+            return 'Off'
+
+        elif self.startButton.text == "Stop":
+            return 'On'
 
     def get_direction(self):
         if self.dirSwitch.text == "->":
-            return 1
+            self.dirSwitch.text = "<-"
         elif self.dirSwitch.text == "<-":
-            return 0
+            self.dirSwitch.text = "->"
 
     def direction_control(self):
         if self.get_direction() == 0:
@@ -77,29 +95,6 @@ class MainScreen(Screen):
         elif self.get_direction() == 1:
             self.motor_move(0, self.get_speed())
             self.dirSwitch.text = "<-"
-
-    @staticmethod
-    def motor_move(direc, speedy):
-        s0.free()
-        s0.run(direc, speedy)
-
-    def start_control_switch(self):
-        if self.start_text() == 'Off':
-            self.startButton.text = "Stop"
-            self.startButton.color = 1, 0.21, 0.13, 1
-            self.motor_move(self.get_direction(), self.get_speed())
-
-        elif self.start_text() == 'On':
-            self.startButton.text = "Start"
-            self.startButton.color = .43, 0.68, 0.08, 1
-            s0.free()
-
-    def start_text(self):
-        if self.startButton.text == "Start":
-            return 'Off'
-
-        elif self.startButton.text == "Stop":
-            return 'On'
 
 
 # ----------------- Screen Declarations -----------------------
