@@ -58,28 +58,27 @@ class MainScreen(Screen):
     direct = 1
 
     def m_speed(self):
-        print("slider")
-        self.start_motor()
+        s0.softFree()
+        s0.run(direct, self.speedSlider.value)
+    # updates speed value based on slider
 
     def start_motor(self):
-        global speedy
-        speedy = self.speedSlider.value
-
         if self.start_text() == 'Off':
             self.startButton.text = "Stop"
             self.startButton.color = 1, 0.21, 0.13, 1
-            s0.run(direct, speedy)
-
+            s0.run(direct, self.speedSlider.value)
         elif self.start_text() == 'On':
             self.startButton.text = "Start"
             self.startButton.color = 0.43, 0.68, 0.08, 1
-            s0.softStop()
+            s0.free()
+    # changes motor 0 state
 
     def start_text(self):
         if self.startButton.text == "Start":
             return 'Off'
         elif self.startButton.text == "Stop":
             return 'On'
+    # checks motor 0 state
 
     @staticmethod
     def change_direction():
@@ -87,14 +86,19 @@ class MainScreen(Screen):
             return 1
         elif direct == 1:
             return 0
+    # changes "direct" variable
 
     def direction_control(self):
         if self.change_direction() == 1:
             global direct
             direct = 1
+            self.m_speed()
         elif self.change_direction() == 0:
             global direct
             direct = 0
+            self.m_speed()
+    # changes direction of motor 0
+# main screen setup
 
 
 # ----------------- Screen Declarations -----------------------
