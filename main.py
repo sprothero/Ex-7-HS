@@ -58,7 +58,7 @@ class MainScreen(Screen):
     direct = 1
 
     def m_speed(self):
-        s0.softFree()
+        s0.free()
         s0.run(direct, self.speedSlider.value)
     # updates speed value based on slider
 
@@ -89,14 +89,17 @@ class MainScreen(Screen):
     # changes "direct" variable
 
     def direction_control(self):
-        if self.change_direction() == 1:
-            global direct
-            direct = 1
-            self.m_speed()
-        elif self.change_direction() == 0:
-            global direct
-            direct = 0
-            self.m_speed()
+        if self.start_text() == 'On':
+            if self.change_direction() == 1:
+                global direct
+                direct = 1
+                self.m_speed()
+            elif self.change_direction() == 0:
+                global direct
+                direct = 0
+                self.m_speed()
+        elif self.start_text() == 'Off':
+            pass
     # changes direction of motor 0
 # main screen setup
 
