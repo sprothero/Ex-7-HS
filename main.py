@@ -1,3 +1,8 @@
+
+# ////////////////////////////////////////////////////////////////////////////////
+# ///                               All Imports                                ///
+# ////////////////////////////////////////////////////////////////////////////////
+
 import os
 from kivy.core.window import Window
 import pygame
@@ -6,7 +11,6 @@ import RPi.GPIO as GPIO
 from pidev.stepper import stepper
 from Slush.Devices import L6470Registers
 
-# ------------------------- all imports -------------------------
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -25,7 +29,10 @@ from kivy.graphics import Color, Rectangle
 from kivy.uix.slider import Slider
 from threading import Thread
 from time import sleep
-# -----------------------------------------------------------------
+
+# ////////////////////////////////////////////////////////////////////////////////
+# ///                             Screen and Setup                             ///
+# ////////////////////////////////////////////////////////////////////////////////
 
 MIXPANEL_TOKEN = "x"
 MIXPANEL = MixPanel("Project Name", MIXPANEL_TOKEN)
@@ -49,7 +56,10 @@ class ProjectNameGUI(App):
     def build(self):
         return SCREEN_MANAGER
 # Launches Window Manager
-# -----------------------------------------------------------------
+
+# ////////////////////////////////////////////////////////////////////////////////
+# ///                       Main Screen Initialization                         ///
+# ////////////////////////////////////////////////////////////////////////////////
 
 
 class MainScreen(Screen):
@@ -58,7 +68,7 @@ class MainScreen(Screen):
     direct = 1
 
     def m_speed(self):
-        s0.free()
+        s0.softFree()
         s0.run(direct, self.speedSlider.value)
     # updates speed value based on slider
 
@@ -101,13 +111,18 @@ class MainScreen(Screen):
         elif self.start_text() == 'Off':
             pass
     # changes direction of motor 0
-# main screen setup
 
 
-# ----------------- Screen Declarations -----------------------
+# ////////////////////////////////////////////////////////////////////////////////
+# ///                           Screen Declarations                            ///
+# ////////////////////////////////////////////////////////////////////////////////
+
 Builder.load_file('main.kv')
 SCREEN_MANAGER.add_widget(MainScreen(name=MAIN_SCREEN_NAME))
-# -------------------------------------------------------------
+
+# ////////////////////////////////////////////////////////////////////////////////
+# ///                     GUI and MixPanel Initialization                      ///
+# ////////////////////////////////////////////////////////////////////////////////
 
 
 def send_event(event_name):
