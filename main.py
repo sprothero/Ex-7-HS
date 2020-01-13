@@ -41,7 +41,7 @@ MIXPANEL = MixPanel("Project Name", MIXPANEL_TOKEN)
 spi = spidev.SpiDev()
 
 global s0speed
-s0speed = 1
+s0speed = 8
 
 s0 = stepper(port=0, micro_steps=32, hold_current=20, run_current=20, accel_current=20, deaccel_current=20,
              steps_per_unit=200, speed=s0speed)
@@ -92,10 +92,16 @@ class MainScreen(Screen):
 
     def main_motor_control(self):
         s0.softFree()
-        s0.run(direct, self.speedSlider.value)
+        if self.start_text() == 'Off':
+            pass
+
+        elif self.start_text() == 'On':
+            s0.run(direct, self.speedSlider.value)
     # updates speed value based on slider
 
     def start_motor(self):
+   #     global s0speed
+   #     s0speed = 8
         if self.start_text() == 'Off':
             self.startButton.text = "Stop"
             self.startButton.color = 1, 0.21, 0.13, 1
