@@ -67,6 +67,14 @@ class MainScreen(Screen):
     global direct
     direct = 1
 
+    def start_program(self):
+        self.s0_text()
+        s0.start_relative_move(15)
+        self.s0_text()
+
+    def s0_text(self):
+        self.positionLabel.text = str(s0.get_position_in_units())
+
     def main_motor_control(self):
         s0.softFree()
         s0.run(direct, self.speedSlider.value)
@@ -111,7 +119,6 @@ class MainScreen(Screen):
         elif self.start_text() == 'Off':
             pass
     # changes direction of motor 0
-
 
 # ////////////////////////////////////////////////////////////////////////////////
 # ///                           Screen Declarations                            ///

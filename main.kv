@@ -8,6 +8,7 @@
     startButton: startButton
     dirSwitch: dirSwitch
     speedSlider: speedSlider
+    positionLabel: positionLabel
 
     FloatLayout:
         size_hint: None, None
@@ -47,14 +48,22 @@
         color: 0.0, 0.7, 0.81, 1
         on_press: root.direction_control()
 
-    Label: # label that displays get_position_in_units ---- NOT COMPLETE
+    DPEAButton: # button that starts the program
+        id: programStart
+        text: "Program"
+        size: 600, 250
+        x: root.width * 0.35
+        y: root.height * 0.175
+        color: 0.0, 0.39, 0.39, 1
+        on_press: root.start_program()
+
+    Label: # label that displays get_position_in_units for motor 0
         id: positionLabel
         font_size: 50
         color: 1, 1, 1, 1
         bold: True
-        color: 1, 1, 1, 1
         x: root.width * 0
         y: root.height * -0.4
         outline_width: 5
         outline_color: 0, 0, 0
-        text: str(get_position_in_units)
+        text: " "
