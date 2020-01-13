@@ -40,8 +40,11 @@ MIXPANEL = MixPanel("Project Name", MIXPANEL_TOKEN)
 
 spi = spidev.SpiDev()
 
+global s0speed
+s0speed = 1
+
 s0 = stepper(port=0, micro_steps=32, hold_current=20, run_current=20, accel_current=20, deaccel_current=20,
-             steps_per_unit=200, speed=8)
+             steps_per_unit=200, speed=s0speed)
 # Init a 200 steps per revolution stepper on Port 0
 
 SCREEN_MANAGER = ScreenManager()
@@ -69,8 +72,19 @@ class MainScreen(Screen):
     direct = 1
 
     def start_program(self):
+        global s0speed
         self.s0_text()
+        s0speed = 1
         s0.start_relative_move(15)
+        self.s0_text()
+
+        sleep(10)
+        s0speed = 5
+        s0.start_relative_move(10)
+        self.s0_text()
+
+        sleep(8)
+        s0.goHome()
         self.s0_text()
 
     def s0_text(self):
