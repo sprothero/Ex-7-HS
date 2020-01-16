@@ -40,15 +40,13 @@ MIXPANEL = MixPanel("Project Name", MIXPANEL_TOKEN)
 
 spi = spidev.SpiDev()
 
-global s0speed
-s0speed = 8
-
 s0 = stepper(port=0, micro_steps=32, hold_current=20, run_current=20, accel_current=20, deaccel_current=20,
-             steps_per_unit=200, speed=s0speed)
+             steps_per_unit=200, speed=8)
 # Init a 200 steps per revolution stepper on Port 0
 
 SCREEN_MANAGER = ScreenManager()
 MAIN_SCREEN_NAME = 'main'
+NEW_SCREEN_NAME = 'new'
 
 Builder.load_file('main.kv')
 Window.clearcolor = (0.7, 0.7, 0.7, 1)
@@ -72,20 +70,41 @@ class MainScreen(Screen):
     direct = 1
 
     def start_program(self):
-        global s0speed
-        self.s0_text()
-        s0speed = 1
-        s0.start_relative_move(15)
-        self.s0_text()
+        self.move_in_rotations(1, 15)
 
+        self.s0_text()
+        print("rest for 10 seconds")
         sleep(10)
-        s0speed = 5
-        s0.start_relative_move(10)
+
+        self.move_in_rotations(5, 10)
+
+        self.s0_text()
+        print("rest for 8 seconds")
+        sleep(8)
+
+        print("go home")
+        s0.goHome()
+
+        print("rest for 30 seconds")
+        sleep(30)
         self.s0_text()
 
-        sleep(8)
+        self.move_in_rotations(-8, 100)
+
+        self.s0_text()
+        print("rest for 10 seconds")
+        sleep(10)
+
+        print("go home")
         s0.goHome()
         self.s0_text()
+
+    @staticmethod
+    def move_in_rotations(speed, rotations):
+        s0.set_speed(speed)
+        print(rotations, 'revolutions clockwise at', 1, 'revolutions/second')
+        s0.relative_move(rotations)
+        sleep(rotations / speed)
 
     def s0_text(self):
         self.positionLabel.text = str(s0.get_position_in_units())
@@ -100,8 +119,6 @@ class MainScreen(Screen):
     # updates speed value based on slider
 
     def start_motor(self):
-   #     global s0speed
-   #     s0speed = 8
         if self.start_text() == 'Off':
             self.startButton.text = "Stop"
             self.startButton.color = 1, 0.21, 0.13, 1
@@ -141,6 +158,27 @@ class MainScreen(Screen):
             pass
     # changes direction of motor 0
 
+    @staticmethod
+    def screen_transition():
+        SCREEN_MANAGER.current = NEW_SCREEN_NAME
+
+
+# ////////////////////////////////////////////////////////////////////////////////
+# ///                     Second  Screen Initialization                        ///
+# ////////////////////////////////////////////////////////////////////////////////
+
+class AppScreen(Screen):
+    button_state = ObjectProperty(None)
+
+    def __init__(self, **kwargs):
+        Builder.load_file('appScreen.kv')
+
+        super(AppScreen, self).__init__(**kwargs)
+
+    @staticmethod
+    def screen_transition_back():
+        SCREEN_MANAGER.current = MAIN_SCREEN_NAME
+
 
 # ////////////////////////////////////////////////////////////////////////////////
 # ///                           Screen Declarations                            ///
@@ -148,6 +186,7 @@ class MainScreen(Screen):
 
 Builder.load_file('main.kv')
 SCREEN_MANAGER.add_widget(MainScreen(name=MAIN_SCREEN_NAME))
+SCREEN_MANAGER.add_widget(AppScreen(name=NEW_SCREEN_NAME))
 
 
 # ////////////////////////////////////////////////////////////////////////////////

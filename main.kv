@@ -68,3 +68,12 @@
         outline_width: 5
         outline_color: 0, 0, 0
         text: " "
+
+    DPEAButton: # button that changes screens
+        id: changeScreen
+        text: "Next"
+        size: 1175, 100
+        x: root.width * 0.2
+        y: root.height * 0.85
+        color: 1.0, 0.29, 0.29, 1
+        on_press: root.screen_transition()
