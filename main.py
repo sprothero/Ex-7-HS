@@ -134,49 +134,70 @@ class AppScreen(Screen):
 
         super(AppScreen, self).__init__(**kwargs)
 
+    def pro_start_motor(self):
+        if self.pro_start_text() == 'Off':
+            self.proStart.text = "Stop"
+            self.start_program()
+        elif self.pro_start_text() == 'On':
+            self.proStart.text = "Start"
+            s0.free()
+
+    def pro_start_text(self):
+        if self.proStart.text == "Start":
+            return 'Off'
+        elif self.proStart.text == "Stop":
+            return 'On'
+
     @staticmethod
     def m_pos():
         return s0.get_position_in_units()
 
     def start_program(self):
-        self.move_in_rotations(1, 15)
+        self.move_in_rotations(1, 15, self.m_pos())
 
         self.sleep_seconds(10)
 
-        self.move_in_rotations(5, 10)
+        self.move_in_rotations(5, 10, self.m_pos())
 
         self.sleep_seconds(8)
 
-        self.move_home()
+        self.move_home(self.m_pos())
 
         self.sleep_seconds(30)
 
-        self.move_in_rotations(-5, 100)
+        self.move_in_rotations(-5, 100, self.m_pos())
 
         self.sleep_seconds(10)
 
-        self.move_home()
+        self.move_home(self.m_pos())
+        self.proLabel.text = "Ready"
 
     def sleep_seconds(self, seconds):
-        print('rest for', seconds, 'seconds')
+        self.test('s')
+   #     self.proLabel.text = ('rest for', seconds, 'seconds')
         sleep(seconds)
-        self.m_pos()
 
-    def move_in_rotations(self, speed, rotations):
+    def move_in_rotations(self, speed, rotations, pos_val):
+        self.test(self.m_pos())
         s0.set_speed(speed)
-        print(rotations, 'revolutions clockwise at', speed, 'revolutions/second')
+     #   self.proLabel.text = (rotations, 'revolutions clockwise at', speed, 'revolutions/second')
         s0.relative_move(rotations)
-        self.m_pos()
+     #   self.posLabel.text = 'Position:', pos_val
 
-    def move_home(self):
+    def move_home(self, pos_val):
+        self.test('h')
         s0.set_speed(3)
-        print('go home')
+     #   self.proLabel.text = "go home"
         s0.go_to_position(0.0)
-        self.m_pos()
+        self.posLabel.text = "Position: 0.0"
 
     @staticmethod
     def screen_transition_back():
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
+
+    @staticmethod
+    def test(inte):
+        print("oof", inte)
 
 
 # ////////////////////////////////////////////////////////////////////////////////

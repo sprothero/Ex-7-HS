@@ -5,8 +5,9 @@
 
 <AppScreen>:
     name: 'new'
-    positionLabel: positionLabel
-    sectionLabel: sectionLabel
+    posLabel: posLabel
+    proLabel: proLabel
+    proStart: proStart
 
     FloatLayout:
         size_hint: None, None
@@ -17,7 +18,7 @@
 # ////////////////////////////////////////////////////////////////////////////////
 
     Label: # label that shows the position of motor 0
-        id: positionLabel
+        id: posLabel
         font_size: 100
         color: 1, 1, 1, 1
         bold: True
@@ -28,24 +29,24 @@
         text: "Position: 0.0"
 
     Label: # label that shows parts of program
-        id: sectionLabel
+        id: proLabel
         font_size: 100
         color: 1, 1, 1, 1
         bold: True
-        x: root.width * 0.2
-        y: root.height * -0.25
+        x: root.width * 0.0
+        y: root.height * 0.1
         outline_width: 10
         outline_color: 0, 0, 0
-        text: "Position: 0.0"
+        text: "Ready"
 
     DPEAButton: # button that starts the program
-        id: programStart
-        text: "Program"
+        id: proStart
+        text: "Start"
         size: 600, 300
         x: root.width * 0.075
         y: root.height * 0.1
         color: 0.0, 0.39, 0.39, 1
-        on_press: root.start_program()
+        on_press: root.pro_start_motor()
 
     DPEAButton: # button that changes screens
         id: changeScreenBack
