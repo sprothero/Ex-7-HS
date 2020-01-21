@@ -6,8 +6,7 @@
 <AppScreen>:
     name: 'new'
     positionLabel: positionLabel
-
-    on_enter: root.start_joy_thread()
+    sectionLabel: sectionLabel
 
     FloatLayout:
         size_hint: None, None
@@ -26,7 +25,17 @@
         y: root.height * -0.25
         outline_width: 10
         outline_color: 0, 0, 0
-       # text: "Position: " + str(root.pos_val)
+        text: "Position: 0.0"
+
+    Label: # label that shows parts of program
+        id: sectionLabel
+        font_size: 100
+        color: 1, 1, 1, 1
+        bold: True
+        x: root.width * 0.2
+        y: root.height * -0.25
+        outline_width: 10
+        outline_color: 0, 0, 0
         text: "Position: 0.0"
 
     DPEAButton: # button that starts the program

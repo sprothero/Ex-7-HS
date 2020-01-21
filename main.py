@@ -52,8 +52,6 @@ Builder.load_file('main.kv')
 Window.clearcolor = (0.7, 0.7, 0.7, 1)
 # Initial Window Color
 
-pygame.init()
-
 
 class ProjectNameGUI(App):
     def build(self):
@@ -130,71 +128,51 @@ class MainScreen(Screen):
 
 class AppScreen(Screen):
     button_state = ObjectProperty(None)
-    pos_val = ObjectProperty(None)
 
     def __init__(self, **kwargs):
         Builder.load_file('appScreen.kv')
 
         super(AppScreen, self).__init__(**kwargs)
 
-    def start_m_thread(self):
-        Thread(target=self.val_update()).start()
-     #   Thread(target=self.get_m_values()).start()
-
-    def get_m_values(self):
-        while 1:
-            self.pos_val = s0.get_position_in_units()
-            sleep(0.01)
-
-    def val_update(self):
-        while 1:
-            self.positionLabel.text = "Position: " + str(s0.get_position_in_units())
-            sleep(0.01)
-
- #   def back_button_update(self):
- #       while 1:
-  #          if Joysticky.get_button_state(0) == 1:
-  #              self.button0.text = "On"
-  #              sleep(0.01)
-  #          else:
-  #              self.button0.text = "Off"
+    @staticmethod
+    def m_pos():
+        return s0.get_position_in_units()
 
     def start_program(self):
-
         self.move_in_rotations(1, 15)
 
-      #  self.sleep_seconds(10)
+        self.sleep_seconds(10)
 
-      #  self.move_in_rotations(5, 10)
+        self.move_in_rotations(5, 10)
 
-      #  self.sleep_seconds(8)
+        self.sleep_seconds(8)
 
         self.move_home()
 
-     #   self.sleep_seconds(30)
+        self.sleep_seconds(30)
 
-   #     self.move_in_rotations(-5, 100)
-#
-      #  self.sleep_seconds(10)
+        self.move_in_rotations(-5, 100)
 
-       # self.move_home()
+        self.sleep_seconds(10)
 
-    @staticmethod
-    def sleep_seconds(seconds):
+        self.move_home()
+
+    def sleep_seconds(self, seconds):
         print('rest for', seconds, 'seconds')
         sleep(seconds)
+        self.m_pos()
 
-    @staticmethod
-    def move_in_rotations(speed, rotations):
+    def move_in_rotations(self, speed, rotations):
         s0.set_speed(speed)
         print(rotations, 'revolutions clockwise at', speed, 'revolutions/second')
         s0.relative_move(rotations)
+        self.m_pos()
 
-    @staticmethod
-    def move_home():
+    def move_home(self):
         s0.set_speed(3)
         print('go home')
-        s0.goHome()
+        s0.go_to_position(0.0)
+        self.m_pos()
 
     @staticmethod
     def screen_transition_back():
