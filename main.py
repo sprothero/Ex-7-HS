@@ -138,39 +138,31 @@ class AppScreen(Screen):
     def start_program(self):
         self.move_in_rotations(1, 15)
 
-   #     self.s0_text()
-        print("rest for 10 seconds")
-        sleep(10)
+        self.sleep_seconds(10)
 
         self.move_in_rotations(5, 10)
 
-   #     self.s0_text()
-        print("rest for 8 seconds")
-        sleep(8)
-
-       # print("go home")
-  #      s0.set_speed(3)
-   #     s0.goHome()
+        self.sleep_seconds(8)
 
         self.move_home()
 
-        print("rest for 30 seconds")
-        sleep(30)
-   #     self.s0_text()
+        self.sleep_seconds(30)
 
         self.move_in_rotations(-5, 100)
 
-    #    self.s0_text()
-        print("rest for 10 seconds")
-        sleep(10)
+        self.sleep_seconds(10)
 
         print("go home")
         s0.set_speed(3)
         s0.goHome()
-   #     self.s0_text()
 
     @staticmethod
-    def move_in_rotations(speed, rotations, self):
+    def sleep_seconds(seconds):
+        print('rest for', seconds, 'seconds')
+        sleep(seconds)
+
+    @staticmethod
+    def move_in_rotations(self, speed, rotations):
         s0.set_speed(speed)
         print(rotations, 'revolutions clockwise at', speed, 'revolutions/second')
         s0.relative_move(rotations)
