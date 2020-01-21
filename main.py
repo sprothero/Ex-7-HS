@@ -69,46 +69,6 @@ class MainScreen(Screen):
     global direct
     direct = 1
 
-    def start_program(self):
-        self.move_in_rotations(1, 15)
-
-        self.s0_text()
-        print("rest for 10 seconds")
-        sleep(10)
-
-        self.move_in_rotations(5, 10)
-
-        self.s0_text()
-        print("rest for 8 seconds")
-        sleep(8)
-
-        print("go home")
-        s0.goHome()
-
-        print("rest for 30 seconds")
-        sleep(30)
-        self.s0_text()
-
-        self.move_in_rotations(-8, 100)
-
-        self.s0_text()
-        print("rest for 10 seconds")
-        sleep(10)
-
-        print("go home")
-        s0.goHome()
-        self.s0_text()
-
-    @staticmethod
-    def move_in_rotations(speed, rotations):
-        s0.set_speed(speed)
-        print(rotations, 'revolutions clockwise at', 1, 'revolutions/second')
-        s0.relative_move(rotations)
-        sleep(rotations / speed)
-
-    def s0_text(self):
-        self.positionLabel.text = str(s0.get_position_in_units())
-
     def main_motor_control(self):
         s0.softFree()
         if self.start_text() == 'Off':
@@ -174,6 +134,55 @@ class AppScreen(Screen):
         Builder.load_file('appScreen.kv')
 
         super(AppScreen, self).__init__(**kwargs)
+
+    def start_program(self):
+        self.move_in_rotations(1, 15)
+
+        self.s0_text()
+        print("rest for 10 seconds")
+        sleep(10)
+
+        self.move_in_rotations(5, 10)
+
+        self.s0_text()
+        print("rest for 8 seconds")
+        sleep(8)
+
+       # print("go home")
+  #      s0.set_speed(3)
+   #     s0.goHome()
+
+        self.move_home()
+
+        print("rest for 30 seconds")
+        sleep(30)
+        self.s0_text()
+
+        self.move_in_rotations(-5, 100)
+
+        self.s0_text()
+        print("rest for 10 seconds")
+        sleep(10)
+
+        print("go home")
+        s0.set_speed(3)
+        s0.goHome()
+        self.s0_text()
+
+    @staticmethod
+    def move_in_rotations(speed, rotations):
+        s0.set_speed(speed)
+        print(rotations, 'revolutions clockwise at', speed, 'revolutions/second')
+        s0.relative_move(rotations)
+
+    @staticmethod
+    def move_home():
+        s0.set_speed(3)
+        print('go home')
+        s0.goHome()
+
+    def s0_text(self):
+        self.positionLabel.text = str(s0.get_position_in_units())
 
     @staticmethod
     def screen_transition_back():
