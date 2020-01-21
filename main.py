@@ -138,13 +138,13 @@ class AppScreen(Screen):
     def start_program(self):
         self.move_in_rotations(1, 15)
 
-        self.s0_text()
+   #     self.s0_text()
         print("rest for 10 seconds")
         sleep(10)
 
         self.move_in_rotations(5, 10)
 
-        self.s0_text()
+   #     self.s0_text()
         print("rest for 8 seconds")
         sleep(8)
 
@@ -156,30 +156,32 @@ class AppScreen(Screen):
 
         print("rest for 30 seconds")
         sleep(30)
-        self.s0_text()
+   #     self.s0_text()
 
         self.move_in_rotations(-5, 100)
 
-        self.s0_text()
+    #    self.s0_text()
         print("rest for 10 seconds")
         sleep(10)
 
         print("go home")
         s0.set_speed(3)
         s0.goHome()
-        self.s0_text()
+   #     self.s0_text()
 
     @staticmethod
-    def move_in_rotations(speed, rotations):
+    def move_in_rotations(speed, rotations, self):
         s0.set_speed(speed)
         print(rotations, 'revolutions clockwise at', speed, 'revolutions/second')
         s0.relative_move(rotations)
+        self.s0_text()
 
     @staticmethod
-    def move_home():
+    def move_home(self):
         s0.set_speed(3)
         print('go home')
         s0.goHome()
+        self.s0_text()
 
     def s0_text(self):
         self.positionLabel.text = str(s0.get_position_in_units())
