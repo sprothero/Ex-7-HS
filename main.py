@@ -46,7 +46,7 @@ s0 = stepper(port=0, micro_steps=32, hold_current=20, run_current=20, accel_curr
 
 SCREEN_MANAGER = ScreenManager()
 MAIN_SCREEN_NAME = 'main'
-NEW_SCREEN_NAME = 'new'
+PRO_SCREEN_NAME = 'program'
 
 Builder.load_file('main.kv')
 Window.clearcolor = (0.7, 0.7, 0.7, 1)
@@ -119,20 +119,20 @@ class MainScreen(Screen):
 
     @staticmethod
     def screen_transition():
-        SCREEN_MANAGER.current = NEW_SCREEN_NAME
+        SCREEN_MANAGER.current = PRO_SCREEN_NAME
 
 
 # ////////////////////////////////////////////////////////////////////////////////
 # ///                     Program Screen Initialization                        ///
 # ////////////////////////////////////////////////////////////////////////////////
 
-class AppScreen(Screen):
+class ProgramScreen(Screen):
     button_state = ObjectProperty(None)
 
     def __init__(self, **kwargs):
-        Builder.load_file('appScreen.kv')
+        Builder.load_file('ProgramScreen.kv')
 
-        super(AppScreen, self).__init__(**kwargs)
+        super(ProgramScreen, self).__init__(**kwargs)
 
     def start_program(self):
         s0.free()
@@ -245,7 +245,7 @@ class AppScreen(Screen):
 
 Builder.load_file('main.kv')
 SCREEN_MANAGER.add_widget(MainScreen(name=MAIN_SCREEN_NAME))
-SCREEN_MANAGER.add_widget(AppScreen(name=NEW_SCREEN_NAME))
+SCREEN_MANAGER.add_widget(ProgramScreen(name=PRO_SCREEN_NAME))
 
 
 # ////////////////////////////////////////////////////////////////////////////////
