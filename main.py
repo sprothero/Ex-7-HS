@@ -134,57 +134,95 @@ class AppScreen(Screen):
 
         super(AppScreen, self).__init__(**kwargs)
 
-    def pro_start_motor(self):
-        if self.pro_start_text() == 'Off':
-            self.proStart.text = "Stop"
-            self.start_program()
-        elif self.pro_start_text() == 'On':
-            self.proStart.text = "Start"
-            s0.free()
-
-    def pro_start_text(self):
-        if self.proStart.text == "Start":
-            return 'Off'
-        elif self.proStart.text == "Stop":
-            return 'On'
-
     def start_program(self):
-        self.proLabel.text = "15 revolutions clockwise at 1 revolution/second"
+        s0.free()
+        Clock.schedule_once(lambda dt: self.part0(), 0.01)
+        Clock.schedule_once(lambda dt: self.part1(), 0.03)
+        Clock.schedule_once(lambda dt: self.part2(), 15)
+        Clock.schedule_once(lambda dt: self.part3(), 25)
+        Clock.schedule_once(lambda dt: self.part4(), 25.01)
+        Clock.schedule_once(lambda dt: self.part5(), 27.01)
+        Clock.schedule_once(lambda dt: self.part6(), 35)
+        Clock.schedule_once(lambda dt: self.part7(), 35.01)
+        Clock.schedule_once(lambda dt: self.part8(), 40.25)
+        Clock.schedule_once(lambda dt: self.part9(), 70.25)
+        Clock.schedule_once(lambda dt: self.part10(), 70.26)
+        Clock.schedule_once(lambda dt: self.part11(), 90.25)
+        Clock.schedule_once(lambda dt: self.part12(), 100.25)
+        Clock.schedule_once(lambda dt: self.part13(), 100.26)
+        Clock.schedule_once(lambda dt: self.part14(), 125.25)
+
+    def part0(self):
+        self.proLabel.text = "15 turns at 1 turn/second"
+        s0.free()
+    # update label
+
+    def part1(self):
         self.move_in_rotations(1, 15)
         self.posLabel.text = "Position: 15.0"
+    # turn motor
 
+    def part2(self):
         self.proLabel.text = "rest for 10 seconds"
-        self.sleep_seconds(10)
+        s0.free()
+    # update label and rest
 
-        self.proLabel.text = "10 revolutions clockwise at 5 revolutions/second"
+    def part3(self):
+        self.proLabel.text = "10 turns at 5 turns/second"
+        s0.free()
+    # update label
+
+    def part4(self):
         self.move_in_rotations(5, 10)
         self.posLabel.text = "Position: 25.0"
+    # turn motor
 
+    def part5(self):
         self.proLabel.text = "rest for 8 seconds"
-        self.sleep_seconds(8)
+        s0.free()
+    # update label and rest
 
+    def part6(self):
         self.proLabel.text = "go home"
+    # update label
+
+    def part7(self):
         self.move_home()
         self.posLabel.text = "Position: 0.0"
+    # go home
 
+    def part8(self):
         self.proLabel.text = "rest for 30 seconds"
-        self.sleep_seconds(30)
+        s0.free()
+    # update label and rest
 
-        self.proLabel.text = "100 revolutions counter-clockwise at 8 revolutions/second"
+    def part9(self):
+        self.proLabel.text = "100 turns backwards at 8 turns/second"
+    # update label
+
+    def part10(self):
         self.move_in_rotations(-5, 100)
         self.posLabel.text = "Position: -100.0"
+    # turn motor
 
+    def part11(self):
         self.proLabel.text = "rest for 10 seconds"
-        self.sleep_seconds(10)
+    # update label and rest
 
+    def part12(self):
         self.proLabel.text = "go home"
+        s0.free()
+    # update label
+
+    def part13(self):
         self.move_home()
         self.posLabel.text = "Position: 0.0"
-        self.proLabel.text = "Ready"
+    # go home
 
-    @staticmethod
-    def sleep_seconds(seconds):
-        sleep(seconds)
+    def part14(self):
+        self.proLabel.text = "Ready"
+        s0.free()
+    # update label
 
     @staticmethod
     def move_in_rotations(speed, rotations):
@@ -193,7 +231,7 @@ class AppScreen(Screen):
 
     @staticmethod
     def move_home():
-        s0.set_speed(3)
+        s0.set_speed(4)
         s0.go_to_position(0.0)
 
     @staticmethod
