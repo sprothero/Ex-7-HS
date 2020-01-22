@@ -201,7 +201,7 @@ class AppScreen(Screen):
     # update label
 
     def part10(self):
-        self.move_in_rotations(-5, 100)
+        self.move_in_rotations(-4, 100)
         self.posLabel.text = "Position: -100.0"
     # turn motor
 
