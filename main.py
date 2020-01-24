@@ -276,7 +276,7 @@ class MotorScreen(Screen):
     def trigger_button_update(self):
         while 1:
             if self.get_trigger_button_state() == 'up':
-                self.button_up()
+                pass
             else:
                 self.button_down()
 
@@ -289,11 +289,8 @@ class MotorScreen(Screen):
         self.goSwitch.color = 0, 0.588, 0.637, 1
         sleep(0.05)
         if cyprus.read_gpio() & 0b0001:
+            self.goSwitch.color = 0.0, 0.84, 0.91, 1
             self.p4_change()
-
-    def button_up(self):
-        self.goSwitch.color = 0.0, 0.84, 0.91, 1
-        sleep(0.05)
 
     @staticmethod
     def get_p4_state():
