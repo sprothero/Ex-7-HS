@@ -73,6 +73,15 @@ class MainScreen(Screen):
     global direct
     direct = 1
 
+    @staticmethod
+    def cyprus_setup():
+        global p4_state
+        p4_state = 0
+        cyprus.initialize()
+        cyprus.setup_servo(1)
+        cyprus.set_servo_position(1, 0)
+        sleep(0.2)
+
     def main_motor_control(self):
         s0.softFree()
         if self.start_text() == 'Off':
@@ -261,12 +270,30 @@ class MotorScreen(Screen):
         Builder.load_file('motorScreen.kv')
         super(MotorScreen, self).__init__(**kwargs)
 
+    def start_cyprus_thread(self):
+        Thread(target=self.trigger_button_update).start()
+
+    def trigger_button_update(self):
+        while 1:
+            if self.get_trigger_button_state() == 'up':
+                self.button_up()
+            else:
+                self.button_down()
+
     @staticmethod
-    def cyprus_setup():
-        cyprus.initialize()
-        cyprus.setup_servo(1)
-        cyprus.set_servo_position(1, 0)
-        sleep(0.2)
+    def get_trigger_button_state():
+        if cyprus.read_gpio() & 0b0001:
+            return 'up'
+
+    def button_down(self):
+        self.goSwitch.color = 0, 0.588, 0.637, 1
+        sleep(0.05)
+        if cyprus.read_gpio() & 0b0001:
+            self.p4_change()
+
+    def button_up(self):
+        self.goSwitch.color = 0.0, 0.84, 0.91, 1
+        sleep(0.05)
 
     @staticmethod
     def get_p4_state():
@@ -279,13 +306,11 @@ class MotorScreen(Screen):
         if self.get_p4_state() == 0:
             global p4_state
             p4_state = 0
-
             cyprus.set_servo_position(1, 0)
             sleep(0.2)
         elif self.get_p4_state() == 1:
             global p4_state
             p4_state = 1
-
             cyprus.set_servo_position(1, 1)
             sleep(0.2)
 

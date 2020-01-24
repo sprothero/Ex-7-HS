@@ -7,7 +7,7 @@
     name: 'motor'
     goSwitch: goSwitch
 
-    on_enter: root.cyprus_setup()
+    on_enter: root.start_cyprus_thread()
 
     FloatLayout:
         size_hint: None, None
@@ -17,14 +17,13 @@
 # ///                                 Widgets                                  ///
 # ////////////////////////////////////////////////////////////////////////////////
 
-    DPEAButton: # button that toggles the P4 motor from 0 to 180
+    DPEAButton: # button that shows when the switch toggles the P4 motor back and forth
         id: goSwitch
         text: "Switch"
         size: 500, 300
         x: root.width * 0.3
         y: root.height * 0.2
         color: 0.0, 0.84, 0.91, 1
-        on_release: root.p4_change()
 
     DPEAButton: # button that changes to program screen
         text: "Back"
