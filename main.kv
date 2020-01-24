@@ -48,8 +48,7 @@
         color: 0.0, 0.7, 0.81, 1
         on_press: root.direction_control()
 
-    DPEAButton: # button that changes screens
-        id: changeScreen
+    DPEAButton: # button that changes to program screen
         text: "Next ->"
         size: 1175, 100
         x: root.width * 0.2
@@ -57,3 +56,10 @@
         color: 1.0, 0.29, 0.29, 1
         on_press: root.screen_transition()
 
+    DPEAButton: # button that changes to servo motor screen
+        text: "SERVO"
+        size: 1175, 200
+        x: root.width * 0.2
+        y: root.height * 0.1
+        color: 0.54, 0.54, 01.0, 1
+        on_press: root.motor_screen_transition()

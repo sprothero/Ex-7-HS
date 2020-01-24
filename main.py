@@ -122,6 +122,10 @@ class MainScreen(Screen):
     def screen_transition():
         SCREEN_MANAGER.current = PRO_SCREEN
 
+    @staticmethod
+    def motor_screen_transition():
+        SCREEN_MANAGER.current = MOTOR_SCREEN
+
 
 # ////////////////////////////////////////////////////////////////////////////////
 # ///                     Program Screen Initialization                        ///
@@ -241,7 +245,7 @@ class ProgramScreen(Screen):
 
 
 # ////////////////////////////////////////////////////////////////////////////////
-# ///                       Motor Screen Initialization                        ///
+# ///                      Motor Screen Initialization                         ///
 # ////////////////////////////////////////////////////////////////////////////////
 
 class MotorScreen(Screen):
@@ -253,7 +257,7 @@ class MotorScreen(Screen):
         super(MotorScreen, self).__init__(**kwargs)
 
     @staticmethod
-    def screen_transition():
+    def transition_back():
         SCREEN_MANAGER.current = MAIN_SCREEN
 
 

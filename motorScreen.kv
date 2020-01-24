@@ -3,7 +3,7 @@
 # ///                     Declarations and Initialization                      ///
 # ////////////////////////////////////////////////////////////////////////////////
 
-<MainScreen>:
+<MotorScreen>:
     name: 'motor'
 
     FloatLayout:
@@ -14,3 +14,10 @@
 # ///                                 Widgets                                  ///
 # ////////////////////////////////////////////////////////////////////////////////
 
+    DPEAButton: # button that changes to program screen
+        text: "Back"
+        size: 200, 200
+        y: root.height * 0.75
+        x: root.width * 0.05
+        color: 0.54, 0.54, 01.0, 1
+        on_press: root.transition_back()
