@@ -29,6 +29,10 @@ from kivy.graphics import Color, Rectangle
 from kivy.uix.slider import Slider
 from threading import Thread
 from time import sleep
+import RPi.GPIO as GPIO
+from pidev.stepper import stepper
+from Slush.Devices import L6470Registers
+from pidev.Cyprus_Commands import Cyprus_Commands_RPi as cyprus
 
 
 # ////////////////////////////////////////////////////////////////////////////////
@@ -250,15 +254,43 @@ class ProgramScreen(Screen):
 
 class MotorScreen(Screen):
     button_state = ObjectProperty(None)
+    global p4_state
+    p4_state = 1
 
     def __init__(self, **kwargs):
         Builder.load_file('motorScreen.kv')
 
         super(MotorScreen, self).__init__(**kwargs)
 
+        cyprus.initialize()
+        cyprus.setup_servo(1)
+
+    @staticmethod
+    def get_p4_state():
+        if p4_state == 0:
+            return 1
+        elif p4_state == 1:
+            return 0
+    # gets "p4_state" variable
+
+    def change(self):
+        if self.get_p4_state() == 0:
+            global p4_state
+            p4_state = 0
+
+            cyprus.set_servo_position(1, 0)
+            sleep(0.2)
+        elif self.get_p4_state() == 1:
+            global p4_state
+            p4_state = 1
+
+            cyprus.set_servo_position(1, 1)
+            sleep(0.2)
+
     @staticmethod
     def transition_back():
         SCREEN_MANAGER.current = MAIN_SCREEN
+        cyprus.close()
 
 
 # ////////////////////////////////////////////////////////////////////////////////
