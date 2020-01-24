@@ -7,6 +7,8 @@
     name: 'motor'
     goSwitch: goSwitch
 
+    on_enter: root.cyprus_setup()
+
     FloatLayout:
         size_hint: None, None
 
@@ -22,7 +24,7 @@
         x: root.width * 0.3
         y: root.height * 0.2
         color: 0.0, 0.84, 0.91, 1
-        on_release: root.change()
+        on_release: root.p4_change()
 
     DPEAButton: # button that changes to program screen
         text: "Back"

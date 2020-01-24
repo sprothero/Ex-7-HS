@@ -255,15 +255,18 @@ class ProgramScreen(Screen):
 class MotorScreen(Screen):
     button_state = ObjectProperty(None)
     global p4_state
-    p4_state = 1
+    p4_state = 0
 
     def __init__(self, **kwargs):
         Builder.load_file('motorScreen.kv')
-
         super(MotorScreen, self).__init__(**kwargs)
 
+    @staticmethod
+    def cyprus_setup():
         cyprus.initialize()
         cyprus.setup_servo(1)
+        cyprus.set_servo_position(1, 0)
+        sleep(0.2)
 
     @staticmethod
     def get_p4_state():
@@ -271,9 +274,8 @@ class MotorScreen(Screen):
             return 1
         elif p4_state == 1:
             return 0
-    # gets "p4_state" variable
 
-    def change(self):
+    def p4_change(self):
         if self.get_p4_state() == 0:
             global p4_state
             p4_state = 0
