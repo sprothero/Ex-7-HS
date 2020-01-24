@@ -45,8 +45,9 @@ s0 = stepper(port=0, micro_steps=32, hold_current=20, run_current=20, accel_curr
 # Init a 200 steps per revolution stepper on Port 0
 
 SCREEN_MANAGER = ScreenManager()
-MAIN_SCREEN_NAME = 'main'
-PRO_SCREEN_NAME = 'program'
+MAIN_SCREEN = 'main'
+PRO_SCREEN = 'program'
+MOTOR_SCREEN = 'motor'
 
 Builder.load_file('main.kv')
 Window.clearcolor = (0.7, 0.7, 0.7, 1)
@@ -119,7 +120,7 @@ class MainScreen(Screen):
 
     @staticmethod
     def screen_transition():
-        SCREEN_MANAGER.current = PRO_SCREEN_NAME
+        SCREEN_MANAGER.current = PRO_SCREEN
 
 
 # ////////////////////////////////////////////////////////////////////////////////
@@ -236,7 +237,24 @@ class ProgramScreen(Screen):
 
     @staticmethod
     def screen_transition_back():
-        SCREEN_MANAGER.current = MAIN_SCREEN_NAME
+        SCREEN_MANAGER.current = MAIN_SCREEN
+
+
+# ////////////////////////////////////////////////////////////////////////////////
+# ///                       Motor Screen Initialization                        ///
+# ////////////////////////////////////////////////////////////////////////////////
+
+class MotorScreen(Screen):
+    button_state = ObjectProperty(None)
+
+    def __init__(self, **kwargs):
+        Builder.load_file('motorScreen.kv')
+
+        super(MotorScreen, self).__init__(**kwargs)
+
+    @staticmethod
+    def screen_transition():
+        SCREEN_MANAGER.current = MAIN_SCREEN
 
 
 # ////////////////////////////////////////////////////////////////////////////////
@@ -244,8 +262,9 @@ class ProgramScreen(Screen):
 # ////////////////////////////////////////////////////////////////////////////////
 
 Builder.load_file('main.kv')
-SCREEN_MANAGER.add_widget(MainScreen(name=MAIN_SCREEN_NAME))
-SCREEN_MANAGER.add_widget(ProgramScreen(name=PRO_SCREEN_NAME))
+SCREEN_MANAGER.add_widget(MainScreen(name=MAIN_SCREEN))
+SCREEN_MANAGER.add_widget(ProgramScreen(name=PRO_SCREEN))
+SCREEN_MANAGER.add_widget(MotorScreen(name=MOTOR_SCREEN))
 
 
 # ////////////////////////////////////////////////////////////////////////////////
