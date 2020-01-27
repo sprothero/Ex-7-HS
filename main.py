@@ -54,6 +54,7 @@ SCREEN1 = 'screen1'
 PRO_SCREEN = 'program'
 SCREEN2 = 'screen2'
 SCREEN3 = 'screen3'
+TRANSITION = 'transition'
 
 
 Builder.load_file('main.kv')
@@ -74,17 +75,23 @@ class ProjectNameGUI(App):
 class MainScreen(Screen):
     button_state = ObjectProperty(None)
 
-    @staticmethod
-    def cyprus_setup():
-        global p4_state
-        p4_state = 0
-        cyprus.initialize()
-        cyprus.setup_servo(1)
-        cyprus.set_servo_position(1, 0)
-        sleep(0.2)
+    def go_to_screen(self, screen_num):
+        SCREEN_MANAGER.current = TRANSITION
+
+
+# ////////////////////////////////////////////////////////////////////////////////
+# ///                   Transition Screen Initialization                       ///
+# ////////////////////////////////////////////////////////////////////////////////
+
+class TransitionScreen(Screen):
+
+    def __init__(self, **kwargs):
+        Builder.load_file('transition.kv')
+
+        super(TransitionScreen, self).__init__(**kwargs)
 
     @staticmethod
-    def go_to_screen(screen_num):
+    def send_to_screen(screen_num):
         if screen_num == 1:
             SCREEN_MANAGER.current = SCREEN1
         elif screen_num == 2:
@@ -291,6 +298,15 @@ class Part2Screen(Screen):
         Builder.load_file('screen2.kv')
         super(Part2Screen, self).__init__(**kwargs)
 
+    def cyprus_setup(self):
+        global p4_state
+        p4_state = 0
+        cyprus.initialize()
+        cyprus.setup_servo(1)
+        cyprus.set_servo_position(1, 0)
+        sleep(0.2)
+        self.start_cyprus_thread()
+
     def start_cyprus_thread(self):
         Thread(target=self.trigger_button_update).start()
 
@@ -365,6 +381,7 @@ SCREEN_MANAGER.add_widget(ProgramScreen(name=PRO_SCREEN))
 SCREEN_MANAGER.add_widget(Part2Screen(name=SCREEN2))
 SCREEN_MANAGER.add_widget(Part1Screen(name=SCREEN1))
 SCREEN_MANAGER.add_widget(Part3Screen(name=SCREEN3))
+SCREEN_MANAGER.add_widget(TransitionScreen(name=TRANSITION))
 
 
 # ////////////////////////////////////////////////////////////////////////////////
