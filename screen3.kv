@@ -3,10 +3,8 @@
 # ///                     Declarations and Initialization                      ///
 # ////////////////////////////////////////////////////////////////////////////////
 
-<MainScreen>:
-    name: 'main'
-
-    on_enter: root.cyprus_setup()
+<Part3Screen>:
+    name: 'screen3'
 
     FloatLayout:
         size_hint: None, None
@@ -16,18 +14,10 @@
 # ///                                 Widgets                                  ///
 # ////////////////////////////////////////////////////////////////////////////////
 
-    DPEAButton: # button that changes to stepper screen
-        text: "Stepper"
-        size: 1175, 100
-        x: root.width * 0.2
-        y: root.height * 0.85
-        color: 1.0, 0.29, 0.29, 1
-        on_press: root.go_to_screen(1)
-
-    DPEAButton: # button that changes to servo motor screen
-        text: "Servo"
-        size: 1175, 200
-        x: root.width * 0.2
-        y: root.height * 0.1
+    DPEAButton: # button that changes to main screen
+        text: "Back"
+        size: 200, 200
+        y: root.height * 0.75
+        x: root.width * 0.05
         color: 0.54, 0.54, 01.0, 1
-        on_press: root.go_to_screen(2)
+        on_press: root.transition_back()

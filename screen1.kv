@@ -1,0 +1,65 @@
+
+# ////////////////////////////////////////////////////////////////////////////////
+# ///                     Declarations and Initialization                      ///
+# ////////////////////////////////////////////////////////////////////////////////
+
+<Part1Screen>:
+    name: 'screen1'
+    startButton: startButton
+    dirSwitch: dirSwitch
+    speedSlider: speedSlider
+
+    FloatLayout:
+        size_hint: None, None
+
+
+# ////////////////////////////////////////////////////////////////////////////////
+# ///                                 Widgets                                  ///
+# ////////////////////////////////////////////////////////////////////////////////
+
+    Slider: # slider that changes speed of motor 0
+        id: speedSlider
+        min: 50
+        max: 1000
+        step: 1
+        size_hint: None, None
+        size: 700, 800
+        orientation: 'vertical'
+        background_width: 150
+        cursor_size: (3500, 3500)
+        center: root.width * 0.1, root.height * 0.5
+        on_touch_move: root.main_motor_control()
+
+    DPEAButton: # button that toggles motor 0 on/off
+        id: startButton
+        text: "Start"
+        size: 500, 300
+        x: root.width * 0.55
+        y: root.height * 0.4
+        color: 0.43, 0.68, 0.08, 1
+        on_press: root.start_motor()
+
+    DPEAButton: # button that toggles direction of motor 0
+        id: dirSwitch
+        text: "Change"
+        size: 500, 300
+        x: root.width * 0.2
+        y: root.height * 0.4
+        color: 0.0, 0.7, 0.81, 1
+        on_press: root.direction_control()
+
+    DPEAButton: # button that changes to program screen
+        text: "Program"
+        size: 1175, 100
+        x: root.width * 0.2
+        y: root.height * 0.85
+        color: 1.0, 0.29, 0.29, 1
+        on_press: root.screen_transition()
+
+    DPEAButton: # button that changes to main screen
+        text: "Back"
+        size: 200, 200
+        y: root.height * 0.75
+        x: root.width * 0.05
+        color: 0.54, 0.54, 01.0, 1
+        on_press: root.screen_transition_back()

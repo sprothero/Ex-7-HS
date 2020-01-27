@@ -50,8 +50,11 @@ s0 = stepper(port=0, micro_steps=32, hold_current=20, run_current=20, accel_curr
 
 SCREEN_MANAGER = ScreenManager()
 MAIN_SCREEN = 'main'
+SCREEN1 = 'screen1'
 PRO_SCREEN = 'program'
-MOTOR_SCREEN = 'motor'
+SCREEN2 = 'screen2'
+SCREEN3 = 'screen3'
+
 
 Builder.load_file('main.kv')
 Window.clearcolor = (0.7, 0.7, 0.7, 1)
@@ -70,8 +73,6 @@ class ProjectNameGUI(App):
 
 class MainScreen(Screen):
     button_state = ObjectProperty(None)
-    global direct
-    direct = 1
 
     @staticmethod
     def cyprus_setup():
@@ -81,6 +82,30 @@ class MainScreen(Screen):
         cyprus.setup_servo(1)
         cyprus.set_servo_position(1, 0)
         sleep(0.2)
+
+    @staticmethod
+    def go_to_screen(screen_num):
+        if screen_num == 1:
+            SCREEN_MANAGER.current = SCREEN1
+        elif screen_num == 2:
+            SCREEN_MANAGER.current = SCREEN1
+        elif screen_num == 3:
+            SCREEN_MANAGER.current = SCREEN3
+
+
+# ////////////////////////////////////////////////////////////////////////////////
+# ///                     Stepper Screen Initialization                        ///
+# ////////////////////////////////////////////////////////////////////////////////
+
+class Part1Screen(Screen):
+    button_state = ObjectProperty(None)
+    global direct
+    direct = 1
+
+    def __init__(self, **kwargs):
+        Builder.load_file('screen1.kv')
+
+        super(Part1Screen, self).__init__(**kwargs)
 
     def main_motor_control(self):
         s0.softFree()
@@ -132,16 +157,12 @@ class MainScreen(Screen):
     # changes direction of motor 0
 
     @staticmethod
-    def screen_transition():
-        SCREEN_MANAGER.current = PRO_SCREEN
-
-    @staticmethod
-    def motor_screen_transition():
-        SCREEN_MANAGER.current = MOTOR_SCREEN
+    def screen_transition_back():
+        SCREEN_MANAGER.current = MAIN_SCREEN
 
 
 # ////////////////////////////////////////////////////////////////////////////////
-# ///                     Program Screen Initialization                        ///
+# ///                 Stepper Program Screen Initialization                    ///
 # ////////////////////////////////////////////////////////////////////////////////
 
 class ProgramScreen(Screen):
@@ -258,17 +279,17 @@ class ProgramScreen(Screen):
 
 
 # ////////////////////////////////////////////////////////////////////////////////
-# ///                      Motor Screen Initialization                         ///
+# ///                      Servo Screen Initialization                         ///
 # ////////////////////////////////////////////////////////////////////////////////
 
-class MotorScreen(Screen):
+class Part2Screen(Screen):
     button_state = ObjectProperty(None)
     global p4_state
     p4_state = 0
 
     def __init__(self, **kwargs):
-        Builder.load_file('motorScreen.kv')
-        super(MotorScreen, self).__init__(**kwargs)
+        Builder.load_file('screen2.kv')
+        super(Part2Screen, self).__init__(**kwargs)
 
     def start_cyprus_thread(self):
         Thread(target=self.trigger_button_update).start()
@@ -318,13 +339,32 @@ class MotorScreen(Screen):
 
 
 # ////////////////////////////////////////////////////////////////////////////////
+# ///                      Talon Screen Initialization                         ///
+# ////////////////////////////////////////////////////////////////////////////////
+
+class Part3Screen(Screen):
+    button_state = ObjectProperty(None)
+
+    def __init__(self, **kwargs):
+        Builder.load_file('screen3.kv')
+        super(Part3Screen, self).__init__(**kwargs)
+
+    @staticmethod
+    def transition_back():
+        SCREEN_MANAGER.current = MAIN_SCREEN
+        cyprus.close()
+
+
+# ////////////////////////////////////////////////////////////////////////////////
 # ///                           Screen Declarations                            ///
 # ////////////////////////////////////////////////////////////////////////////////
 
 Builder.load_file('main.kv')
 SCREEN_MANAGER.add_widget(MainScreen(name=MAIN_SCREEN))
 SCREEN_MANAGER.add_widget(ProgramScreen(name=PRO_SCREEN))
-SCREEN_MANAGER.add_widget(MotorScreen(name=MOTOR_SCREEN))
+SCREEN_MANAGER.add_widget(Part2Screen(name=SCREEN2))
+SCREEN_MANAGER.add_widget(Part1Screen(name=SCREEN1))
+SCREEN_MANAGER.add_widget(Part3Screen(name=SCREEN3))
 
 
 # ////////////////////////////////////////////////////////////////////////////////
