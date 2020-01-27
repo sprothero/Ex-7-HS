@@ -16,16 +16,32 @@
 
     DPEAButton: # button that changes to stepper screen
         text: "Stepper"
-        size: 1175, 100
-        x: root.width * 0.2
-        y: root.height * 0.85
-        color: 1.0, 0.29, 0.29, 1
+        size: 800, 400
+        x: root.width * 0.05
+        y: root.height * 0.55
+        color: 0.40, 0.82, 0.45, 1
         on_press: root.go_to_screen(1)
 
-    DPEAButton: # button that changes to servo motor screen
+    DPEAButton: # button that changes to servo screen
         text: "Servo"
-        size: 1175, 200
-        x: root.width * 0.2
-        y: root.height * 0.1
-        color: 0.54, 0.54, 01.0, 1
+        size: 800, 400
+        x: root.width * 0.525
+        y: root.height * 0.55
+        color: 0, 0.82, 1.0, 1
         on_press: root.go_to_screen(2)
+
+    DPEAButton: # button that changes to talon screen
+        text: "Talon"
+        size: 800, 400
+        x: root.width * 0.05
+        y: root.height * 0.075
+        color: 1, 0.62, 0.38, 1
+        on_press: root.go_to_screen(3)
+
+    DPEAButton: # button that changes to cytron screen
+        text: "Cytron"
+        size: 800, 400
+        x: root.width * 0.525
+        y: root.height * 0.075
+        color: 0.96, 0.6, 01.0, 1
+        on_press: root.go_to_screen(4)

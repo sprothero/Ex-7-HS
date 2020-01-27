@@ -5,6 +5,9 @@
 
 <TransitionScreen>:
     name: 'transition'
+    setupLabel: setupLabel
+
+    on_enter: root.send_to_screen()
 
     FloatLayout:
         size_hint: None, None
@@ -13,3 +16,22 @@
 # ////////////////////////////////////////////////////////////////////////////////
 # ///                                 Widgets                                  ///
 # ////////////////////////////////////////////////////////////////////////////////
+
+    Label: # label that gives instructions for setup
+        id: setupLabel
+        font_size: 100
+        color: 1, 1, 1, 1
+        bold: True
+        x: root.width * 0.0
+        y: root.height * 0.1
+        outline_width: 10
+        outline_color: 0, 0, 0
+        text: " "
+
+    DPEAButton: # button that changes to the program
+        text: "Ready"
+        size: 1175, 100
+        x: root.width * 0.2
+        y: root.height * 0.85
+        color: 1.0, 0.29, 0.29, 1
+        on_press: root.screen_go()

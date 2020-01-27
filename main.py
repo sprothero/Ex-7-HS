@@ -75,7 +75,10 @@ class ProjectNameGUI(App):
 class MainScreen(Screen):
     button_state = ObjectProperty(None)
 
-    def go_to_screen(self, screen_num):
+    @staticmethod
+    def go_to_screen(screen_num):
+        global snum
+        snum = screen_num
         SCREEN_MANAGER.current = TRANSITION
 
 
@@ -84,19 +87,32 @@ class MainScreen(Screen):
 # ////////////////////////////////////////////////////////////////////////////////
 
 class TransitionScreen(Screen):
-
     def __init__(self, **kwargs):
         Builder.load_file('transition.kv')
 
         super(TransitionScreen, self).__init__(**kwargs)
 
+    def send_to_screen(self):
+        global snum
+
+        if snum == 1:
+            self.setupLabel.text = "Stepper Motor in port 0"
+        elif snum == 2:
+            self.setupLabel.text = "Servo Motor in P4, Limit Switch in P6"
+        elif snum == 3:
+            self.setupLabel.text = "Talon Motor in P4, Limit Switch in P6"
+        elif snum == 4:
+            self.setupLabel.text = "Cytron controller and DC motor in P5, Proximity sensor in P7"
+
     @staticmethod
-    def send_to_screen(screen_num):
-        if screen_num == 1:
+    def screen_go():
+        if snum == 1:
             SCREEN_MANAGER.current = SCREEN1
-        elif screen_num == 2:
-            SCREEN_MANAGER.current = SCREEN1
-        elif screen_num == 3:
+        elif snum == 2:
+            SCREEN_MANAGER.current = SCREEN2
+        elif snum == 3:
+            SCREEN_MANAGER.current = SCREEN3
+        elif snum == 4:
             SCREEN_MANAGER.current = SCREEN3
 
 
@@ -368,7 +384,6 @@ class Part3Screen(Screen):
     @staticmethod
     def transition_back():
         SCREEN_MANAGER.current = MAIN_SCREEN
-        cyprus.close()
 
 
 # ////////////////////////////////////////////////////////////////////////////////
