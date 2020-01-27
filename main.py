@@ -29,7 +29,6 @@ from kivy.graphics import Color, Rectangle
 from kivy.uix.slider import Slider
 from threading import Thread
 from time import sleep
-import RPi.GPIO as GPIO
 from pidev.stepper import stepper
 from Slush.Devices import L6470Registers
 from pidev.Cyprus_Commands import Cyprus_Commands_RPi as cyprus
@@ -58,7 +57,7 @@ TRANSITION = 'transition'
 
 
 Builder.load_file('main.kv')
-Window.clearcolor = (0.7, 0.7, 0.7, 1)
+Window.clearcolor = (0.75, 0.75, 0.75, 1)
 # Initial Window Color
 
 
@@ -87,6 +86,8 @@ class MainScreen(Screen):
 # ////////////////////////////////////////////////////////////////////////////////
 
 class TransitionScreen(Screen):
+    button_state = ObjectProperty(None)
+
     def __init__(self, **kwargs):
         Builder.load_file('transition.kv')
 
