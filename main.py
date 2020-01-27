@@ -94,18 +94,21 @@ class TransitionScreen(Screen):
 
     def send_to_screen(self):
         global snum
-
         if snum == 1:
+            self.setupLabel.font_size = 150
             self.setupLabel.text = "Stepper Motor in port 0"
         elif snum == 2:
+            self.setupLabel.font_size = 100
             self.setupLabel.text = "Servo Motor in P4, Limit Switch in P6"
         elif snum == 3:
+            self.setupLabel.font_size = 100
             self.setupLabel.text = "Talon Motor in P4, Limit Switch in P6"
         elif snum == 4:
+            self.setupLabel.font_size = 65
             self.setupLabel.text = "Cytron controller and DC motor in P5, Proximity sensor in P7"
 
-    @staticmethod
-    def screen_go():
+    def screen_go(self):
+        self.setupLabel.text = " "
         if snum == 1:
             SCREEN_MANAGER.current = SCREEN1
         elif snum == 2:
