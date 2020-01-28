@@ -397,6 +397,26 @@ class Part3Screen(Screen):
     def start_cyprus_thread(self):
         Thread(target=self.trigger_button_update).start()
 
+    def trigger_button_update(self):
+        while 1:
+            if self.get_trigger_button_state() == 'up':
+                pass
+            else:
+                self.button_down()
+
+    @staticmethod
+    def get_trigger_button_state():
+        if cyprus.read_gpio() & 0b0001:
+            return 'up'
+
+    def button_down(self):
+        sleep(0.05)
+        if cyprus.read_gpio() & 0b0001:
+            self.talon_start()
+
+    def talon_start(self):
+        pass
+
     @staticmethod
     def transition_back():
         SCREEN_MANAGER.current = MAIN_SCREEN
