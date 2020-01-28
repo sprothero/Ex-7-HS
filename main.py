@@ -385,6 +385,18 @@ class Part3Screen(Screen):
         Builder.load_file('screen3.kv')
         super(Part3Screen, self).__init__(**kwargs)
 
+    def cyprus_setup(self):
+        global p4_state
+        p4_state = 0
+        cyprus.initialize()
+        cyprus.setup_servo(1)
+        cyprus.set_servo_position(1, 0)
+        sleep(0.2)
+        self.start_cyprus_thread()
+
+    def start_cyprus_thread(self):
+        Thread(target=self.trigger_button_update).start()
+
     @staticmethod
     def transition_back():
         SCREEN_MANAGER.current = MAIN_SCREEN
