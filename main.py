@@ -49,10 +49,10 @@ s0 = stepper(port=0, micro_steps=32, hold_current=20, run_current=20, accel_curr
 
 SCREEN_MANAGER = ScreenManager()
 MAIN_SCREEN = 'main'
-SCREEN1 = 'screen1'
+SCREEN1_NAME = 'screen1'
 PRO_SCREEN = 'program'
-SCREEN2 = 'screen2'
-SCREEN3 = 'screen3'
+SCREEN2_NAME = 'screen2'
+SCREEN3_NAME = 'screen3'
 TRANSITION = 'transition'
 
 
@@ -111,13 +111,13 @@ class TransitionScreen(Screen):
     def screen_go(self):
         self.setupLabel.text = " "
         if snum == 1:
-            SCREEN_MANAGER.current = SCREEN1
+            SCREEN_MANAGER.current = SCREEN1_NAME
         elif snum == 2:
-            SCREEN_MANAGER.current = SCREEN2
+            SCREEN_MANAGER.current = SCREEN2_NAME
         elif snum == 3:
-            SCREEN_MANAGER.current = SCREEN3
-        elif snum == 4:
-            SCREEN_MANAGER.current = SCREEN3
+            SCREEN_MANAGER.current = SCREEN3_NAME
+      #  elif snum == 4:
+       #     SCREEN_MANAGER.current = SCREEN3_NAME
 
 
 # ////////////////////////////////////////////////////////////////////////////////
@@ -302,7 +302,7 @@ class ProgramScreen(Screen):
 
     @staticmethod
     def screen_transition_back():
-        SCREEN_MANAGER.current = MAIN_SCREEN
+        SCREEN_MANAGER.current = SCREEN1_NAME
 
 
 # ////////////////////////////////////////////////////////////////////////////////
@@ -311,16 +311,16 @@ class ProgramScreen(Screen):
 
 class Part2Screen(Screen):
     button_state = ObjectProperty(None)
-    global p4_state
-    p4_state = 0
+    global servo_state
+    servo_state = 0
 
     def __init__(self, **kwargs):
         Builder.load_file('screen2.kv')
         super(Part2Screen, self).__init__(**kwargs)
 
     def cyprus_setup(self):
-        global p4_state
-        p4_state = 0
+        global servo_state
+        servo_state = 0
         cyprus.initialize()
         cyprus.setup_servo(1)
         cyprus.set_servo_position(1, 0)
@@ -347,26 +347,26 @@ class Part2Screen(Screen):
         sleep(0.05)
         if cyprus.read_gpio() & 0b0001:
             self.goSwitch.color = 0.0, 0.84, 0.91, 1
-            self.p4_change()
+            self.servo_change()
 
     @staticmethod
-    def get_p4_state():
-        if p4_state == 0:
+    def get_servo_state():
+        if servo_state == 0:
             return 1
-        elif p4_state == 1:
+        elif servo_state == 1:
             return 0
 
-    def p4_change(self):
-        if self.get_p4_state() == 0:
-            global p4_state
-            p4_state = 0
+    def servo_change(self):
+        if self.get_servo_state() == 0:
+            global servo_state
+            servo_state = 0
             cyprus.set_servo_position(1, 0)
-            sleep(0.2)
-        elif self.get_p4_state() == 1:
-            global p4_state
-            p4_state = 1
+            sleep(0.05)
+        elif self.get_servo_state() == 1:
+            global servo_state
+            servo_state = 1
             cyprus.set_servo_position(1, 1)
-            sleep(0.2)
+            sleep(0.05)
 
     @staticmethod
     def transition_back():
@@ -385,40 +385,24 @@ class Part3Screen(Screen):
         Builder.load_file('screen3.kv')
         super(Part3Screen, self).__init__(**kwargs)
 
-    def cyprus_setup(self):
-        global p4_state
-        p4_state = 0
-        cyprus.initialize()
-        cyprus.setup_servo(1)
-        cyprus.set_servo_position(1, 0)
-        sleep(0.2)
-        self.start_cyprus_thread()
-
-    def start_cyprus_thread(self):
-        Thread(target=self.trigger_button_update).start()
-
-    def trigger_button_update(self):
-        while 1:
-            if self.get_trigger_button_state() == 'up':
-                pass
-            else:
-                self.button_down()
+    def talon_threading(self):
+        Thread(target=self.talon_change).start()
 
     @staticmethod
-    def get_trigger_button_state():
+    def talon_change():
         if cyprus.read_gpio() & 0b0001:
-            return 'up'
-
-    def button_down(self):
-        sleep(0.05)
-        if cyprus.read_gpio() & 0b0001:
-            self.talon_start()
-
-    def talon_start(self):
-        pass
+            sleep(0.05)
+            if cyprus.read_gpio() & 0b0001:
+                cyprus.close()
+        else:
+            sleep(0.05)
+            cyprus.initialize()
+            cyprus.setup_servo(1)
+            cyprus.set_motor_speed(1, 1)
 
     @staticmethod
     def transition_back():
+        cyprus.close()
         SCREEN_MANAGER.current = MAIN_SCREEN
 
 
@@ -429,9 +413,9 @@ class Part3Screen(Screen):
 Builder.load_file('main.kv')
 SCREEN_MANAGER.add_widget(MainScreen(name=MAIN_SCREEN))
 SCREEN_MANAGER.add_widget(ProgramScreen(name=PRO_SCREEN))
-SCREEN_MANAGER.add_widget(Part2Screen(name=SCREEN2))
-SCREEN_MANAGER.add_widget(Part1Screen(name=SCREEN1))
-SCREEN_MANAGER.add_widget(Part3Screen(name=SCREEN3))
+SCREEN_MANAGER.add_widget(Part2Screen(name=SCREEN2_NAME))
+SCREEN_MANAGER.add_widget(Part1Screen(name=SCREEN1_NAME))
+SCREEN_MANAGER.add_widget(Part3Screen(name=SCREEN3_NAME))
 SCREEN_MANAGER.add_widget(TransitionScreen(name=TRANSITION))
 
 
