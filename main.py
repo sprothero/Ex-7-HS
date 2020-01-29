@@ -385,24 +385,16 @@ class Part3Screen(Screen):
         Builder.load_file('screen3.kv')
         super(Part3Screen, self).__init__(**kwargs)
 
-    def talon_threading(self):
-        Thread(target=self.talon_change).start()
-
-    @staticmethod
-    def talon_change():
+    def talon_thing(self):
         if cyprus.read_gpio() & 0b0001:
+            cyprus.set_servo_speed(1, 0)
             sleep(0.05)
-            if cyprus.read_gpio() & 0b0001:
-                cyprus.close()
         else:
+            cyprus.set_servo_position(1, 1)
             sleep(0.05)
-            cyprus.initialize()
-            cyprus.setup_servo(1)
-            cyprus.set_motor_speed(1, 1)
 
     @staticmethod
     def transition_back():
-        cyprus.close()
         SCREEN_MANAGER.current = MAIN_SCREEN
 
 
