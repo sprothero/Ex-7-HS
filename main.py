@@ -27,6 +27,7 @@ from pidev.kivy.selfupdatinglabel import SelfUpdatingLabel
 from kivy.animation import AnimationTransition
 from kivy.graphics import Color, Rectangle
 from kivy.uix.slider import Slider
+import numpy as np
 from threading import Thread
 from time import sleep
 from pidev.stepper import stepper
@@ -381,17 +382,34 @@ class Part2Screen(Screen):
 class Part3Screen(Screen):
     button_state = ObjectProperty(None)
 
+    cyprus.initialize()
+    cyprus.set_servo_speed(2, 0)
+    sleep(0.05)
+
     def __init__(self, **kwargs):
         Builder.load_file('screen3.kv')
         super(Part3Screen, self).__init__(**kwargs)
 
-    def talon_thing(self):
-        if cyprus.read_gpio() & 0b0001:
-            cyprus.set_servo_speed(1, 0)
-            sleep(0.05)
-        else:
-            cyprus.set_servo_position(1, 1)
-            sleep(0.05)
+    def talon_threading(self):
+        Thread(target=self.talon_thing).start()
+
+    @staticmethod
+    def talon_loop():
+        for i in np.arange(0, 1.2, 0.2):
+            cyprus.set_servo_speed(2, i)
+            print(i)
+            sleep(4)
+        cyprus.set_servo_speed(2, 0)
+
+    @staticmethod
+    def talon_thing():
+        while 1:
+            if cyprus.read_gpio() & 0b0001:
+                cyprus.set_servo_speed(1, 0)
+                sleep(0.05)
+            else:
+                cyprus.set_servo_position(1, 1)
+                sleep(0.05)
 
     @staticmethod
     def transition_back():
