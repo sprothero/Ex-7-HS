@@ -383,7 +383,7 @@ class Part3Screen(Screen):
     button_state = ObjectProperty(None)
 
     cyprus.initialize()
-    cyprus.set_servo_speed(2, 0)
+    cyprus.set_servo_speed(1, 0)
     sleep(0.05)
 
     def __init__(self, **kwargs):
@@ -395,11 +395,22 @@ class Part3Screen(Screen):
 
     @staticmethod
     def talon_loop():
-        for i in np.arange(0, 1.2, 0.2):
-            cyprus.set_servo_speed(2, i)
-            print(i)
-            sleep(4)
-        cyprus.set_servo_speed(2, 0)
+        while 1:
+     #   for i in range(0, 10, 1):
+     #       cyprus.set_servo_speed(1, i)
+     #       print(i)
+     #       sleep(2)
+            spee = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+            for i in spee:
+                cyprus.set_servo_position(1, 1)
+              #  sleep(i)
+          #  else:
+             #   cyprus.set_servo_speed(1, 0)
+
+            #    sleep(2)
+
+     #   for i in range(0, )
+      #  cyprus.set_servo_speed(1, 0)
 
     @staticmethod
     def talon_thing():
@@ -410,6 +421,9 @@ class Part3Screen(Screen):
             else:
                 cyprus.set_servo_position(1, 1)
                 sleep(0.05)
+
+    def talon_program(self):
+        pass
 
     @staticmethod
     def transition_back():
