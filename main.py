@@ -382,16 +382,25 @@ class Part2Screen(Screen):
 class Part3Screen(Screen):
     button_state = ObjectProperty(None)
 
-    cyprus.initialize()
-    cyprus.setup_servo(1)
-    sleep(0.05)
-
     def __init__(self, **kwargs):
         Builder.load_file('screen3.kv')
         super(Part3Screen, self).__init__(**kwargs)
 
-   # def talon_threading(self):
-    #    Thread(target=self.talon_thing).start()
+    @staticmethod
+    def setup():
+        cyprus.initialize()
+        cyprus.setup_servo(1)
+        cyprus.set_servo_speed(1, 0)
+        sleep(0.05)
+
+    @staticmethod
+    def is_it_on():
+        if cyprus.read_gpio() & 0b0001:
+            cyprus.set_servo_speed(1, 0)
+            sleep(0.05)
+        else:
+            cyprus.set_servo_position(1, 0)
+            sleep(0.05)
 
     @staticmethod
     def go_to_loop():
@@ -403,21 +412,17 @@ class Part3Screen(Screen):
         sleep(0.05)
 
     @staticmethod
-    def talon_thing():
-        while 1:
-            if cyprus.read_gpio() & 0b0001:
-                cyprus.set_servo_speed(1, 0)
-                sleep(0.05)
-            else:
-                cyprus.set_servo_position(1, 1)
-                sleep(0.05)
-
-    def talon_program(self):
-        pass
+    def talon_program():
+        speed_list = [1, 0, -1]
+        for i in speed_list:
+            cyprus.set_servo_speed(1, i)
+            sleep(5)
+        cyprus.set_servo_speed(1, 0)
 
     @staticmethod
     def transition_back():
         SCREEN_MANAGER.current = MAIN_SCREEN
+        cyprus.close()
 
 
 # ////////////////////////////////////////////////////////////////////////////////

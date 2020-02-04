@@ -6,7 +6,7 @@
 <Part3Screen>:
     name: 'screen3'
 
-  #  on_enter: root.talon_threading()
+    on_enter: root.setup()
 
     FloatLayout:
         size_hint: None, None
@@ -22,7 +22,7 @@
         x: root.width * 0.05
         y: root.height * 0.075
         color: 1, 0.62, 0.38, 1
-        on_press: root.talon_loop()
+        on_press: root.trying_this_other_thing(1)
 
     DPEAButton: # button that makes talon servo turn on at full speed clockwise, then stop 5 seconds, then full speed counterclockwise
         text: "Part 2"
@@ -30,7 +30,7 @@
         x: root.width * 0.525
         y: root.height * 0.075
         color: 0.96, 0.6, 01.0, 1
-        on_press: root.talon_program()
+        on_press: root.trying_this_other_thing(2)
 
 
     DPEAButton: # button that changes to main screen
