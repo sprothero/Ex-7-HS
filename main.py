@@ -404,9 +404,9 @@ class Part3Screen(Screen):
 
     @staticmethod
     def go_to_loop():
-        for i in np.arange(0, 11, 1):
+        for i in np.arange(0, 21, 1):
             cyprus.set_servo_speed(1, i / 10)
-            sleep(2)
+            sleep(1)
         cyprus.set_servo_speed(1, 0)
         sleep(0.05)
 
